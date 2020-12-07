@@ -1,0 +1,5 @@
+node_modules
+payment
+package-lock.json
+public/uploads
+.idea
