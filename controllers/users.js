@@ -2,6 +2,60 @@ const path = require('path');
 const User = require('../models/user');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middlewares/async');
+const fs = require('fs');
+const sharp = require('sharp')
+
+exports.updateFile = async (req, res) => {
+
+    await User.findByIdAndUpdate({_id: req.body.id})
+        .exec((error, user) => {
+            if(error){
+                res.send(error)
+            }else{
+
+                if(!user.photo == null){
+                    const filePath = path.join(path.dirname(__dirname) + user.photo)
+                    fs.unlink(filePath, async (error) => {
+                        if (error) throw error;
+                    })
+                }
+
+                let COMPRESSED_file = path.join(__dirname, '../public/uploads/avatar', new Date().getTime() + '.jpg')
+                sharp(req.file.path).resize(640,480).jpeg({
+                    quality: 80
+                }).toFile(COMPRESSED_file, (error) => {
+                    if(error){
+                        throw error;
+                    }
+                    fs.unlink(req.file.path, async (error) => {
+                        if (error) res.send(error);
+                    })
+
+                })
+               // console.log(req.file.path)
+
+
+
+
+                user.photo = req.file.filename
+                user.save()
+                    .then(() => {
+                        res.send(user)
+                    })
+                    .catch((error) => {
+                        error
+                    })
+            }
+
+    })
+}
+
+
+
+
+
+
+
 
 
 // @description Get all users
@@ -65,3 +119,15 @@ exports.editUser = asyncHandler(async (req,res)=>{
         })
     }
 })
+
+
+
+
+
+
+
+
+
+
+
+

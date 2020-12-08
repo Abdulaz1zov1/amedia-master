@@ -89,7 +89,7 @@ exports.getAll = asyncHandler(async (req,res,next)=>{
         .skip((pageNumber - 1 )* 20)
         .limit(20)
         .sort({date: -1})
-        .select({name: 1, category: 1,type: 1, image: 1, rating: 1})
+        .select({name: 1, category: 1,type: 1, image: 1, rating: 1, season: 1})
         .populate({path: 'category', select: 'nameuz'})
 
     res.status(200).json({
@@ -123,10 +123,20 @@ exports.getById = asyncHandler(async (req,res,next)=>{
         comment
     })
 })
+
+
+
 exports.deleteById = asyncHandler(async (req,res,next)=>{
     await Kino.findByIdAndDelete(req.params.id)
     res.status(200).json({success: true , data: []});
 })
+
+
+
+
+
+
+
 exports.updateById = asyncHandler(async (req,res,next) => {
     let members = []
     let janrs = []
