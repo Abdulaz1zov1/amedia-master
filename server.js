@@ -10,6 +10,11 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/error');
+
+
+app.use('/public/uploads', express.static(path))
+
+
 // Load env vars
 dotenv.config({path : './config/config.env'})
 
