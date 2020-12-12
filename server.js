@@ -11,10 +11,6 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/error');
 
-
-app.use('/public/uploads', express.static(path))
-
-
 // Load env vars
 dotenv.config({path : './config/config.env'})
 
@@ -24,6 +20,7 @@ connectDB();
 app.use(express.json());    
 app.use(express.urlencoded({extended : true}));
 app.use('/public/uploads', express.static(path));
+
 app.use(cookieParser());
 app.use(cors({ rogin : "*" }));
 // Dev logging middlewares

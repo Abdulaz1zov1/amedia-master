@@ -2,29 +2,58 @@ const Season = require('../models/season')
 const Seriya = require('../models/seriya')
 const Kino = require('../models/kino')
 const asyncHandler = require('../middlewares/async')
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp')
 
 exports.addSeason = asyncHandler(async (req,res,next) =>{
-    const urls = [];
     const files = req.files;
-
+    const urls = [];
+    const thumb=[];
     for (const file of files) {
-        const { path } = file;
-        urls.push(path);
+        const { filename } = file;
+        urls.push(`/public/uploads/cinema/org/${filename}`)
+        thumb.push(`/public/uploads/cinema/thumb/${filename}`)
+        await sharp(path.join(path.dirname(__dirname) + `/public/uploads/cinema/org/${filename}`) ).resize(500,500)
+            .jpeg({
+                quality: 60
+            })
+            .toFile(path.join(path.dirname(__dirname) + `/public/uploads/cinema/thumb/${filename}`), (err)=>{
+                if(err) {
+                    throw err
+                }
+            })
     }
     const season = new Season({
-        kinoId: req.body.kinoId,
         name: {
             uz: req.body.nameuz,
-            ru: req.body.nameru,
+            ru: req.body.nameru
         },
-        screens: urls.slice(1,urls.length),
+        screens: {
+            thumb: thumb.slice(1, urls.length),
+            original: urls.slice(1, urls.length)
+        },
         image: urls[0],
         description: {
             uz: req.body.descriptionuz,
             ru: req.body.descriptionru,
         },
         year: req.body.year,
-        num: req.body.num
+        num: req.body.num,
+        // model/kino dan qo'shimcha elementlar qo'shilgan
+        category: req.body.category,
+        translator: req.body.translator,
+        video: req.body.video,
+        rejissor: req.body.rejissor,
+        length: req.body.length,
+        studia: req.body.studia,
+        tayming: req.body.tayming,
+        price: req.body.price,
+        type: req.body.type,
+        janr: req.body.janr,
+        country: req.body.country,
+        slug:(Math.floor(Math.random()*9999999999999)).toString(),
+        seriya: req.body.seriya
     })
     season.save()
         .then(()=> {
@@ -39,19 +68,17 @@ exports.addSeason = asyncHandler(async (req,res,next) =>{
                 data: error
             })
         })
-
 })
 exports.addSeriya = asyncHandler(async (req,res,next) => {
     const seriya = new Seriya({
         name: {
             uz: req.body.nameuz,
-            ru: req.body.nameru,
+            ru: req.body.nameru
         },
         length: req.body.length,
         video: req.body.video,
         season: req.body.season,
-
-        kino: req.body.kinoId
+        slug: (Math.floor(Math.random()*9999999999999)).toString()
     })
     seriya.save()
         .then(()=>{
@@ -72,11 +99,49 @@ exports.allSeason = asyncHandler(async (req,res,next)=>{
     res.send(season)
 })
 exports.deleteSeason = asyncHandler(async (req,res,next) =>{
-    await Season.findByIdAndDelete(req.params.id)
-    res.status(200).json({
-        success: true,
-        data: []
-    })
+    await Season.findById({_id: req.params.id})
+        .exec(async (error,data) => {
+            if(error) {
+                res.send(error)
+            }
+            else{
+                const thumb = data.screens.thumb;
+                const original = data.screens.original
+                // original faylni o'chiradi
+                for (const file of original){
+                    let fileOriginal = path.join(path.dirname(__dirname) + file)
+                    fs.unlink(fileOriginal, async (error) => {
+                        if (error) {
+                            console.log(error)
+                        }
+                    })
+                }
+                // thumb fayni o'chiradi
+                for (const file of thumb){
+                    let fileThump = path.join(path.dirname(__dirname) + file)
+                    fs.unlink(fileThump, async (error) => {
+                        if (error) {
+                            console.log(error)
+                        }
+                    })
+                }
+                // poster faylni o'chiradi
+                let poster = path.join(path.dirname(__dirname) + data.image)
+                fs.unlink(poster, async (error) => {
+                    if (error) {
+                        console.log(error)
+                    }
+                })
+                // :id bo'yicha o'chirib tashlaydi
+                await Season.findByIdAndDelete(req.params.id)
+                res.status(200).json({
+                    success: true,
+                    data: []
+                })
+            }
+        })
+
+
 })
 exports.deleteSeriya = asyncHandler(async (req,res,next)=>{
     await Seriya.findByIdAndDelete(req.params.id)
@@ -87,13 +152,31 @@ exports.deleteSeriya = asyncHandler(async (req,res,next)=>{
 })
 exports.updateSeason = asyncHandler(async (req,res,next) =>{
     const season = await Season.findByIdAndUpdate(req.params.id)
-    season.kinoId = req.body.kinoId
     season.name.uz = req.body.nameuz
     season.name.ru = req.body.nameru
     season.description.uz = req.body.descriptionuz
     season.description.ru = req.body.descriptionru
     season.year = req.body.year
     season.num = req.body.num
+
+
+    season.screens = req.body.screens
+    season.image = req.body.image
+    season.seriya = req.body.seriya
+    season.country = req.body.country
+    season.janr = req.body.janr
+    season.type = req.body.type
+    season.price = req.body.price
+    season.tayming = req.body.tayming
+    season.studia = req.body.studia
+    season.length = req.body.num
+    season.rejissor = req.body.rejissor
+    season.video = req.body.video
+    season.translator = req.body.translator
+    season.category = req.body.category
+
+
+
 
     season
         .save()
@@ -118,6 +201,7 @@ exports.updateSeriya = asyncHandler(async (req,res,next) => {
     seriya.season = req.body.season
     seriya.kino = req.body.kino
     seriya.length = req.body.length
+
 
     seriya
         .save()

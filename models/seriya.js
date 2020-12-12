@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const Season = require('./season')
 const seriyaSchema = mongoose.Schema({
     name: {
         uz: {type: String, required: true},
@@ -7,8 +6,7 @@ const seriyaSchema = mongoose.Schema({
     },
     video: {type: String, required: true},
     season: {type: mongoose.Schema.ObjectId, ref: 'season', required: true},
-    kino: {type: mongoose.Schema.ObjectId, ref: 'kino', required: true},
-
+    slug: {type: String, unique: true, lowercase: true},
     length: {type: String, required: true},
     date: {type: Date, default: Date.now()}
 })

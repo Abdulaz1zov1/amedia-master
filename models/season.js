@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
 
 const SeasonSchema = mongoose.Schema({
-    kinoId : {
-        type: mongoose.Schema.ObjectId,
-        ref: 'kino',
-        required: true
-    },
     name: {
         uz: {type: String, required: true},
         ru: {type: String, required: true}
@@ -14,28 +9,52 @@ const SeasonSchema = mongoose.Schema({
         uz: {type: String, required: true},
         ru: {type: String, required: true}
     },
+
+    category:[{
+        type : mongoose.Schema.ObjectId,
+        ref: 'category',
+        required : true
+    }],
+    translator: [{
+        type : mongoose.Schema.ObjectId,
+        ref: 'member',
+        required : true
+    }],
+    video: {type: String},
+    rejissor: {type: String, required: true},
+    length: {type: String},
+    studia: {type: String, required: true},
+    tayming:[{
+        type: mongoose.Schema.ObjectId,
+        ref: 'member',
+        required: true
+    }],
+    price: {type: String, enum:['free','selling']},
+    type: {type: String, enum: ['film','serial','treyler']},
+    janr: [{
+        type : mongoose.Schema.ObjectId,
+        ref: 'janr',
+        required : true
+    }],
+    country: {type: String, required: true},
+
     year: {type: String, required: true},
     num: {type: String, required: true},
-    screens: [{type: String, required: true}],
-    image: {type: String, required: true},
     seriya: [{type: mongoose.Schema.ObjectId, ref: 'seriya'}],
+    slug: {type: String, unique: true, lowercase: true},
+    screens: {
+        thumb:[{}],
+        original:[{}]
+    },
+    image: {
+        type: String,
+        required: true
+    },
     date: {type: Date, default: Date.now()}
 })
-//
-SeasonSchema.pre('save', async function(next){
-    const arrays = await this.model('season')
-        .find({kinoId: this.kinoId})
-        .select({_id: 1})
 
-    const mapp = arrays.map( function doubleNumber( currentValue ) {
-        return currentValue;
-    })
-    const season = await this.model('kino').findByIdAndUpdate({_id: this.kinoId})
-    season.season = mapp
-    season.save()
-    next();
 
-})
+
 //Cascade Delete
 SeasonSchema.pre('remove' , async function(next){
     await this.model('seriya').deleteMany({ season: this._id });

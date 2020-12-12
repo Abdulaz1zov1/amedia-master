@@ -5,8 +5,11 @@ const asyncHandler = require('../middlewares/async');
 const fs = require('fs');
 const sharp = require('sharp')
 
-exports.updateFile = async (req, res) => {
 
+// @description Update image
+// @route POST /api/upload
+// @access Private/Admin
+exports.updateFile = async (req, res) => {
     await User.findByIdAndUpdate({_id: req.body.id})
         .exec((error, user) => {
             if(error){
@@ -30,13 +33,7 @@ exports.updateFile = async (req, res) => {
                     fs.unlink(req.file.path, async (error) => {
                         if (error) res.send(error);
                     })
-
                 })
-               // console.log(req.file.path)
-
-
-
-
                 user.photo = req.file.filename
                 user.save()
                     .then(() => {
@@ -46,18 +43,8 @@ exports.updateFile = async (req, res) => {
                         error
                     })
             }
-
     })
 }
-
-
-
-
-
-
-
-
-
 // @description Get all users
 // @route GET /api/users
 // @access Private/Admin
@@ -65,7 +52,6 @@ exports.getUsers = asyncHandler( async (req , res , next) => {
       const users = await User.find();
     res.status(200).json({success: true , count : users.length , data: users});
   });
-
 // @description Get single user
 // @route GET /api/users/:id
 // @access Private/Admin
@@ -75,7 +61,6 @@ exports.getUser = asyncHandler( async (req , res , next) => {
       return next(new ErrorResponse(`Resourse not found with id of ${req.params.id}`, 404))
     res.status(200).json({success: true , data: user});
   });
-
 // @description Create user
 // @route POST /api/users
 // @access Private/Admin
@@ -83,8 +68,6 @@ exports.createUser = asyncHandler( async (req , res , next) => {
   const user = await User.create(req.body);
   res.status(200).json({success: true , data: user});
 });
-
-
 // @description Delete user
 // @route DELETE /api/users/:id
 // @access Private/Admin
@@ -94,7 +77,6 @@ exports.deleteUser = asyncHandler( async (req , res , next) => {
             return  next(new ErrorResponse(`Resourse not found with id of ${req.params.id}`,404))
         res.status(200).json({success: true , data: user});
    });
-
 exports.editUser = asyncHandler(async (req,res)=>{
 
     const user = await User.findByIdAndUpdate(req.params.id)

@@ -8,16 +8,12 @@ const { getUser ,
         deleteUser,
         createUser,
         editUser,
-    updateFile,
-    deleteFile
+    updateFile
 } = require('../controllers/users');
 const router = express.Router();
 
 const {protect , authorize} = require('../middlewares/auth')
 //router.use(protect);
-
-
-
 
 
 const storage = multer.diskStorage({
@@ -29,14 +25,6 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({ storage: storage })
-router
-    .route('/upload')
-    .post(upload.single('photo'), updateFile)
-
-
-
-
-
 
 
 router
@@ -50,10 +38,9 @@ router
     .put(protect,authorize('admin','publisher') ,editUser)
     .delete(protect,authorize('admin') , deleteUser);
 
-
 //Update image in user
-
-
-
+router
+    .route('/upload')
+    .post(upload.single('photo'), updateFile)
 
 module.exports = router;

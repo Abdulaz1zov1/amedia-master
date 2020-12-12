@@ -111,8 +111,8 @@ exports.forgotPassword = asyncHandler( async (req , res , next) => {
     const msg = {
         to: req.body.email,
         subject: 'Parolni tiklash manzili',
-        html: `Parolini tiklash uchun ushbu tugmani bosing  <a href="${resetUrl}" style="cursor: pointer">${resetUrl}</a>`
-        // ${ 40ta sonli resetToken keldi }
+        html: `Parolini tiklash uchun ushbu tugmani bosing  <a type="button" href="${resetUrl}" style="cursor: pointer;background-color: #eee ">Tugma</a>`
+
     }
     try{
         await sendEmail(msg)
@@ -169,6 +169,9 @@ const sendTokenResponse = (user, statusCode, res) => {
         .cookie('token', token, options)
         .json({success: true, token});
 }
+
+
+
 
 
 

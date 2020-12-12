@@ -23,20 +23,15 @@ const KinoSchema = new mongoose.Schema({
     rejissor: {type: String, required: true},
     length: {type: String},
     studia: {type: String, required: true},
-    tarjimon:[{
-        type: mongoose.Schema.ObjectId,
-        ref: 'member',
-        required: true
-    }],
     tayming:[{
         type: mongoose.Schema.ObjectId,
         ref: 'member',
         required: true
     }],
-    season: [{type: mongoose.Schema.ObjectId , ref: 'season'}],
-    screens: [
-        {type: String, required: true}
-    ],
+    screens: {
+        thumb:[{type: String}],
+        original:[{type: String}]
+    },
     image: {type: String, required: true},
     type: {type: String, enum: ['film','serial','treyler']},
     price: {type: String, enum:['free','selling']},
