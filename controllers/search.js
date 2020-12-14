@@ -12,6 +12,7 @@ exports.search = asyncHandler(async (req,res,next)=>{
             {name:{ru: {
                         $regex:  searchedQr, options: 'i'
                     }}}])
+        
         .skip((pageNumber - 1 )* 20)
         .limit(20)
         .sort({date: -1})
