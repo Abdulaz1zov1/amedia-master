@@ -38,7 +38,7 @@ router.delete('/:id' ,protect,authorize('admin') ,deleteSeason)
 router.put('/:id',protect,authorize('admin'),updateSeason)
 
 // Seriya Router
-router.post('/seriya',protect,authorize('admin'),addSeriya)
+router.post('/seriya/add',protect,authorize('admin'),addSeriya)
 router.put('/seriya/:id',protect,authorize('admin'),updateSeriya)
 router.delete('/seriya/:id',protect,authorize('admin'),deleteSeriya)
 
