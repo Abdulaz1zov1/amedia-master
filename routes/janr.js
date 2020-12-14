@@ -19,7 +19,7 @@ const {protect , authorize} = require('../middlewares/auth');
 
 router.route('/')
     .get(getJanrs)
-    .post(/*protect , authorize('publisher' , 'admin'),*/ createJanr);
+    .post(protect , authorize('publisher' , 'admin'),createJanr);
 
 router.route('/:janrId')
     .get(getJanr)
