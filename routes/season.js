@@ -31,11 +31,11 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 // Season Router
-router.post('/season',upload.array('images',10),addSeason)
-router.get('/season',protect,authorize('admin'), getAllSeason )
-router.get('/season/:id',protect,authorize('admin'), getByIdSeason )
-router.delete('/season/:id' ,protect,authorize('admin') ,deleteSeason)
-router.put('/season/:id',protect,authorize('admin'),updateSeason)
+router.post('/add',upload.array('images',10),addSeason)
+router.get('/all',/* protect,authorize('admin'),*/ getAllSeason )
+router.get('/:id',/*protect,authorize('admin'),*/ getByIdSeason )
+router.delete('/:id' ,protect,authorize('admin') ,deleteSeason)
+router.put('/:id',protect,authorize('admin'),updateSeason)
 
 // Seriya Router
 router.post('/seriya',protect,authorize('admin'),addSeriya)
