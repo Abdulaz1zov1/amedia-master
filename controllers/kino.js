@@ -93,18 +93,11 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
 })
 exports.getAll = asyncHandler(async (req,res,next)=>{
     const pageNumber = req.query.page
-    let type
-    if(!req.query.type){
-        type = ['film','serial','treyler']
-    } else {
-        type = req.query.type
-    }
     const kino = await Kino.find()
-        .or({type: type})
         .skip((pageNumber - 1 )* 20)
         .limit(20)
         .sort({date: -1})
-        .select({name: 1, category: 1,type: 1, image: 1, rating: 1, season: 1})
+        .select({name: 1, category: 1,type: 1, image: 1, rating: 1})
         .populate({path: 'category', select: 'nameuz'})
 
     res.status(200).json({
@@ -115,12 +108,6 @@ exports.getAll = asyncHandler(async (req,res,next)=>{
 exports.getById = asyncHandler(async (req, res, next)=>{
     const kino = await Kino.findById(req.params.id)
         .populate(['category', 'janr','translator','tayming','tarjimon'])
-        .populate(
-            {path: 'season' ,
-                select: ['seriya','name','description','year','num','image','screens'] ,
-                populate:'seriya'
-            }
-        )
     if(!kino){
         res.status(404).json({
             success: false,

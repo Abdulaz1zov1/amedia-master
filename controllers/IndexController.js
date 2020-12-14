@@ -2,6 +2,7 @@ const Slider = require('../models/slider')
 const asynHandler = require('../middlewares/async')
 const News = require('../models/news')
 const Anotatsiya = require('../models/anotatsiya')
+
 exports.index = asynHandler(async (req,res,next)=>{
     const sliders = await Slider.find()
         .sort({date: -1})

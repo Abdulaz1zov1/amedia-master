@@ -52,9 +52,4 @@ const KinoSchema = new mongoose.Schema({
     date: {type: Date , default: Date.now()}
 })
 
-KinoSchema.pre('remove', async function(next){
-    await this.model('season').deleteMany({ kinoId: this._id });
-    next();
-})
-
 module.exports = mongoose.model('kino',KinoSchema)
