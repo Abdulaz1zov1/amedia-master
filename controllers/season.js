@@ -108,7 +108,6 @@ exports.addSeason = asyncHandler(async (req,res,next) =>{
         studia: req.body.studia,
         tayming: req.body.tayming,
         price: req.body.price,
-        type: req.body.type,
         janr: req.body.janr,
         country: req.body.country,
         slug:(Math.floor(Math.random()*9999999999999)).toString(),
@@ -129,19 +128,17 @@ exports.addSeason = asyncHandler(async (req,res,next) =>{
         })
 })
 exports.getAllSeason = asyncHandler(async (req,res,next)=>{
-    const pageNumber = req.query.page
-    let type
-    if(!req.query.type){
-        type = ['film','serial','treyler']
+    let pageNumber
+    if(!req.query.page){
+        pageNumber = 1
     } else {
-        type = req.query.type
+        pageNumber = req.query.page
     }
     const season = await Season.find()
-        .or({type: type})
         .skip((pageNumber - 1 )* 20)
         .limit(20)
         .sort({date: -1})
-        .select({name: 1, category: 1,type: 1, image: 1, rating: 1, season: 1})
+        .select({name: 1, category: 1, image: 1, rating: 1})
         .populate({path: 'category', select: 'nameuz'})
 
     res.status(200).json({
@@ -151,17 +148,12 @@ exports.getAllSeason = asyncHandler(async (req,res,next)=>{
 })
 exports.getByIdSeason = asyncHandler(async (req,res,next) => {
     const season = await Season.findById(req.params.id)
-        .populate(['category', 'janr','translator','tayming','tarjimon'])
-        .populate(
-            {path: 'season' ,
-                select: ['seriya','name','description','year','num','image','screens'] ,
-                populate:'seriya'
-            }
-        )
+        .populate(['category', 'janr','translator','tayming','tarjimon','seriya'])
+
     if(!season){
         res.status(404).json({
             success: false,
-            data: new ErrorResponse('Season not found',404)
+            data: 'Season not found'
         })
     }
 

@@ -33,7 +33,6 @@ const KinoSchema = new mongoose.Schema({
         original:[{type: String}]
     },
     image: {type: String, required: true},
-    type: {type: String, enum: ['film','serial','treyler']},
     price: {type: String, enum:['free','selling']},
     year: {type: String, required: true},
     janr: [{

@@ -30,7 +30,6 @@ const SeasonSchema = mongoose.Schema({
         required: true
     }],
     price: {type: String, enum:['free','selling']},
-    type: {type: String, enum: ['film','serial','treyler']},
     janr: [{
         type : mongoose.Schema.ObjectId,
         ref: 'janr',

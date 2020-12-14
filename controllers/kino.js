@@ -92,7 +92,13 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
         })
 })
 exports.getAll = asyncHandler(async (req,res,next)=>{
-    const pageNumber = req.query.page
+    let pageNumber
+    if(!req.query.page){
+        pageNumber = 1
+    } else {
+        pageNumber = req.query.page
+    }
+
     const kino = await Kino.find()
         .skip((pageNumber - 1 )* 20)
         .limit(20)
