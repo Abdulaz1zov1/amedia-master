@@ -5,13 +5,19 @@ const md5 = require('md5')
 const path = require('path')
 const {protect , authorize} = require('../middlewares/auth');
 
-const {addSeason ,
-    addSeriya ,
+const {
+    //Season
+    addSeason,
+    getAllSeason,
+    getByIdSeason,
     deleteSeason,
-    deleteSeriya,
     updateSeason,
+    // Seriya
+    addSeriya,
+    getAllSeriya,
+    getByIdSeriya,
     updateSeriya,
-    allSeason
+    deleteSeriya
 } = require('../controllers/season')
 
 
@@ -26,13 +32,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
-router.post('/add',upload.array('images',10),addSeason)
-router.get('/all',/*protect,authorize('admin'),*/ allSeason )
-router.delete('/:id' /*,protect,authorize('admin')*/ ,deleteSeason)
-router.put('/:id',protect,authorize('admin'),updateSeason)
+// Season Router
+router.post('/season',upload.array('images',10),addSeason)
+router.get('/season',/*protect,authorize('admin'),*/ getAllSeason )
+router.get('/season/:id',/*protect,authorize('admin'),*/ getByIdSeason )
+router.delete('/season/:id' /*,protect,authorize('admin')*/ ,deleteSeason)
+router.put('/season/:id',protect,authorize('admin'),updateSeason)
 
-router.delete('/seriya/:id',protect,authorize('admin'),deleteSeriya)
+// Seriya Router
+router.post('/seriya',addSeriya)
+router.get('/seriya', /*protect,authorize('admin'),*/ getAllSeriya )
+router.get('/seriya/:id', /*protect,authorize('admin'),*/ getByIdSeriya )
 router.put('/seriya/:id',protect,authorize('admin'),updateSeriya)
-router.post('/seriya/add',addSeriya)
+router.delete('/seriya/:id',protect,authorize('admin'),deleteSeriya)
 
 module.exports = router;

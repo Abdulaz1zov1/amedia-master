@@ -43,8 +43,8 @@ const SeasonSchema = mongoose.Schema({
     seriya: [{type: mongoose.Schema.ObjectId, ref: 'seriya'}],
     slug: {type: String, unique: true, lowercase: true},
     screens: {
-        thumb:[{}],
-        original:[{}]
+        thumb:[{type: String}],
+        original:[{type: String}]
     },
     image: {
         type: String,

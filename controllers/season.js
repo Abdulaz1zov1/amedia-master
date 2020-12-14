@@ -6,6 +6,95 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp')
 
+// Seriya Controller
+exports.addSeriya = asyncHandler(async (req,res,next) => {
+    const seriya = new Seriya({
+        name: {
+            uz: req.body.nameuz,
+            ru: req.body.nameru
+        },
+        length: req.body.length,
+        video: req.body.video,
+        season: req.body.season,
+        slug: (Math.floor(Math.random()*9999999999999)).toString()
+    })
+    seriya.save()
+        .then(()=>{
+            res.status(201).json({
+                success: true,
+                data: seriya
+            })
+        })
+        .catch((error) => {
+            res.status(400).json({
+                success: false,
+                data: error
+            })
+        })
+})
+exports.getAllSeriya = asyncHandler(async (req,res,next) => {
+    const seriya = await Seriya.find()
+        //.or({type: type})
+        // .skip((pageNumber - 1 )* 20)
+        // .limit(20)
+        .sort({date: -1})
+        .select({name: 1, category: 1,type: 1, image: 1, rating: 1, season: 1})
+        .populate({path: 'category', select: 'nameuz'})
+
+    res.status(200).json({
+        success: true,
+        data: seriya
+    })
+})
+exports.getByIdSeriya = asyncHandler(async (req,res,next) => {
+    const seriya = await Seriya.findById(req.params.id)
+
+    if(!seriya){
+        res.status(404).json({
+            success: false,
+            data: new ErrorResponse('Seriya not found',404)
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        data: seriya
+    })
+})
+exports.deleteSeriya = asyncHandler(async (req,res,next)=>{
+    await Seriya.findByIdAndDelete(req.params.id)
+    res.status(200).json({
+        success: true,
+        data: []
+    })
+})
+exports.updateSeriya = asyncHandler(async (req,res,next) => {
+    const seriya = await Seriya.findByIdAndUpdate(req.params.id)
+
+    seriya.name.uz = req.body.nameuz
+    seriya.name.ru = req.body.nameru
+    seriya.season = req.body.season
+    seriya.kino = req.body.kino
+    seriya.length = req.body.length
+
+
+    seriya
+        .save()
+        .then(()=>{
+            res.status(200).json({
+                success: true,
+                data: seriya
+            })
+        })
+        .catch((error) => {
+            res.status(400).json({
+                success: false,
+                data: error
+            })
+        })
+})
+
+// Season Controller
 exports.addSeason = asyncHandler(async (req,res,next) =>{
     const files = req.files;
     const urls = [];
@@ -69,34 +158,49 @@ exports.addSeason = asyncHandler(async (req,res,next) =>{
             })
         })
 })
-exports.addSeriya = asyncHandler(async (req,res,next) => {
-    const seriya = new Seriya({
-        name: {
-            uz: req.body.nameuz,
-            ru: req.body.nameru
-        },
-        length: req.body.length,
-        video: req.body.video,
-        season: req.body.season,
-        slug: (Math.floor(Math.random()*9999999999999)).toString()
-    })
-    seriya.save()
-        .then(()=>{
-            res.status(201).json({
-                success: true,
-                data: seriya
-            })
-        })
-        .catch((error) => {
-            res.status(400).json({
-                success: false,
-                data: error
-            })
-        })
-})
-exports.allSeason = asyncHandler(async (req,res,next)=>{
+
+
+exports.getAllSeason = asyncHandler(async (req,res,next)=>{
+    const pageNumber = req.query.page
+    let type
+    if(!req.query.type){
+        type = ['film','serial','treyler']
+    } else {
+        type = req.query.type
+    }
     const season = await Season.find()
-    res.send(season)
+        .or({type: type})
+        .skip((pageNumber - 1 )* 20)
+        .limit(20)
+        .sort({date: -1})
+        .select({name: 1, category: 1,type: 1, image: 1, rating: 1, season: 1})
+        .populate({path: 'category', select: 'nameuz'})
+
+    res.status(200).json({
+        success: true,
+        data: season
+    })
+})
+exports.getByIdSeason = asyncHandler(async (req,res,next) => {
+    const season = await Season.findById(req.params.id)
+        .populate(['category', 'janr','translator','tayming','tarjimon'])
+        .populate(
+            {path: 'season' ,
+                select: ['seriya','name','description','year','num','image','screens'] ,
+                populate:'seriya'
+            }
+        )
+    if(!season){
+        res.status(404).json({
+            success: false,
+            data: new ErrorResponse('Season not found',404)
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        data: season
+    })
 })
 exports.deleteSeason = asyncHandler(async (req,res,next) =>{
     await Season.findById({_id: req.params.id})
@@ -143,13 +247,6 @@ exports.deleteSeason = asyncHandler(async (req,res,next) =>{
 
 
 })
-exports.deleteSeriya = asyncHandler(async (req,res,next)=>{
-    await Seriya.findByIdAndDelete(req.params.id)
-    res.status(200).json({
-        success: true,
-        data: []
-    })
-})
 exports.updateSeason = asyncHandler(async (req,res,next) =>{
     const season = await Season.findByIdAndUpdate(req.params.id)
     season.name.uz = req.body.nameuz
@@ -184,31 +281,6 @@ exports.updateSeason = asyncHandler(async (req,res,next) =>{
             res.status(200).json({
                 success: true,
                 data: season
-            })
-        })
-        .catch((error) => {
-            res.status(400).json({
-                success: false,
-                data: error
-            })
-        })
-})
-exports.updateSeriya = asyncHandler(async (req,res,next) => {
-    const seriya = await Seriya.findByIdAndUpdate(req.params.id)
-
-    seriya.name.uz = req.body.nameuz
-    seriya.name.ru = req.body.nameru
-    seriya.season = req.body.season
-    seriya.kino = req.body.kino
-    seriya.length = req.body.length
-
-
-    seriya
-        .save()
-        .then(()=>{
-            res.status(200).json({
-                success: true,
-                data: seriya
             })
         })
         .catch((error) => {

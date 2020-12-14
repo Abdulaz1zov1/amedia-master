@@ -112,7 +112,7 @@ exports.getAll = asyncHandler(async (req,res,next)=>{
         data: kino
     })
 })
-exports.getById = asyncHandler(async (req,res,next)=>{
+exports.getById = asyncHandler(async (req, res, next)=>{
     const kino = await Kino.findById(req.params.id)
         .populate(['category', 'janr','translator','tayming','tarjimon'])
         .populate(
