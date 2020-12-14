@@ -1,6 +1,5 @@
 const Season = require('../models/season')
 const Seriya = require('../models/seriya')
-const Kino = require('../models/kino')
 const asyncHandler = require('../middlewares/async')
 const fs = require('fs');
 const path = require('path');
@@ -31,35 +30,6 @@ exports.addSeriya = asyncHandler(async (req,res,next) => {
                 data: error
             })
         })
-})
-exports.getAllSeriya = asyncHandler(async (req,res,next) => {
-    const seriya = await Seriya.find()
-        //.or({type: type})
-        // .skip((pageNumber - 1 )* 20)
-        // .limit(20)
-        .sort({date: -1})
-        .select({name: 1, category: 1,type: 1, image: 1, rating: 1, season: 1})
-        .populate({path: 'category', select: 'nameuz'})
-
-    res.status(200).json({
-        success: true,
-        data: seriya
-    })
-})
-exports.getByIdSeriya = asyncHandler(async (req,res,next) => {
-    const seriya = await Seriya.findById(req.params.id)
-
-    if(!seriya){
-        res.status(404).json({
-            success: false,
-            data: new ErrorResponse('Seriya not found',404)
-        })
-    }
-
-    res.status(200).json({
-        success: true,
-        data: seriya
-    })
 })
 exports.deleteSeriya = asyncHandler(async (req,res,next)=>{
     await Seriya.findByIdAndDelete(req.params.id)
@@ -158,8 +128,6 @@ exports.addSeason = asyncHandler(async (req,res,next) =>{
             })
         })
 })
-
-
 exports.getAllSeason = asyncHandler(async (req,res,next)=>{
     const pageNumber = req.query.page
     let type

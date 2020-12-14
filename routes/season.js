@@ -14,8 +14,6 @@ const {
     updateSeason,
     // Seriya
     addSeriya,
-    getAllSeriya,
-    getByIdSeriya,
     updateSeriya,
     deleteSeriya
 } = require('../controllers/season')
@@ -34,15 +32,13 @@ const upload = multer({storage: storage});
 
 // Season Router
 router.post('/season',upload.array('images',10),addSeason)
-router.get('/season',/*protect,authorize('admin'),*/ getAllSeason )
-router.get('/season/:id',/*protect,authorize('admin'),*/ getByIdSeason )
-router.delete('/season/:id' /*,protect,authorize('admin')*/ ,deleteSeason)
+router.get('/season',protect,authorize('admin'), getAllSeason )
+router.get('/season/:id',protect,authorize('admin'), getByIdSeason )
+router.delete('/season/:id' ,protect,authorize('admin') ,deleteSeason)
 router.put('/season/:id',protect,authorize('admin'),updateSeason)
 
 // Seriya Router
-router.post('/seriya',addSeriya)
-router.get('/seriya', /*protect,authorize('admin'),*/ getAllSeriya )
-router.get('/seriya/:id', /*protect,authorize('admin'),*/ getByIdSeriya )
+router.post('/seriya',protect,authorize('admin'),addSeriya)
 router.put('/seriya/:id',protect,authorize('admin'),updateSeriya)
 router.delete('/seriya/:id',protect,authorize('admin'),deleteSeriya)
 
