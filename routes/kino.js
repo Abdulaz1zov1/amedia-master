@@ -28,7 +28,7 @@ const upload = multer({storage: storage});
 
 router.get('/all',getAll)
 router.get('/sort',sortByCat)
-router.get('/:id',getById)
+router.get('/:id', protect, getById)
 router.delete('/:id',protect, authorize('publisher' , 'admin'),deleteById)
 router.put('/:id',updateById)
 router.post('/add',protect, authorize('publisher' , 'admin'),upload.array('images', 12),addCinema)

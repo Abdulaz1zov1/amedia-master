@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 // Season Router
 router.post('/add',upload.array('images',10),addSeason)
-router.get('/all',  /* protect,authorize('admin'), */ getAllSeason )
+router.get('/all',  protect,authorize('admin'),  getAllSeason )
 router.get('/:id',protect, getByIdSeason)
 router.delete('/:id' ,protect,authorize('admin') ,deleteSeason)
 router.put('/:id',protect,authorize('admin'),updateSeason)
