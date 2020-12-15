@@ -134,7 +134,7 @@ exports.getById = asyncHandler(async (req, res, next)=>{
     const kino = await Kino.findById(req.params.id)
         .populate(['category', 'janr','translator','tayming','tarjimon'])
 
-    if(kino.status === 'free'){
+    if(kino.price === 'free'){
         return res.status(200).json({
             success: true,
             data: kino,
