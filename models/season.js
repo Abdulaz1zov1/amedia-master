@@ -20,6 +20,11 @@ const SeasonSchema = mongoose.Schema({
         ref: 'member',
         required : true
     }],
+    tarjimon: [{
+        type : mongoose.Schema.ObjectId,
+        ref: 'member',
+        required : true
+    }],
     video: {type: String},
     rejissor: {type: String, required: true},
     length: {type: String},

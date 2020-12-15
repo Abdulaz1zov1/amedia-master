@@ -71,6 +71,7 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
          tayming: tayming,
          category: category,
          translator: members,
+         tarjimon: members,
          janr: janrs,
          video: req.body.video,
          type: req.body.type,
@@ -195,7 +196,8 @@ exports.updateById = asyncHandler(async (req,res,next) => {
     kino.description.uz = req.body.descriptionuz
     kino.description.ru = req.body.descriptionru
     kino.category = req.body.category
-    // kino.translator = members
+    kino.translator = members
+    kino.tarjimon = members
     kino.video = req.body.video,
         kino.rejissor = req.body.rejissor,
         kino.length = req.body.length,

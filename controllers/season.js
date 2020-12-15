@@ -102,6 +102,7 @@ exports.addSeason = asyncHandler(async (req,res,next) =>{
         // model/kino dan qo'shimcha elementlar qo'shilgan
         category: req.body.category,
         translator: req.body.translator,
+        tarjimon: req.body.tarjimon,
         video: req.body.video,
         rejissor: req.body.rejissor,
         length: req.body.length,
@@ -229,11 +230,10 @@ exports.updateSeason = asyncHandler(async (req,res,next) =>{
     season.length = req.body.num
     season.rejissor = req.body.rejissor
     season.video = req.body.video
-    season.translator = req.body.translator
     season.category = req.body.category
 
-
-
+    season.translator = req.body.translator
+    season.tarjimon = req.body.tarjimon
 
     season
         .save()
