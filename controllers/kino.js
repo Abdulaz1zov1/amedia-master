@@ -33,6 +33,7 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
     const members = [];
     const janrs = []
     const tayming = []
+    const member = [];
 
     for(const cat of req.body.category){
         const catt = cat
@@ -41,6 +42,10 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
     for (const member of req.body.translator){
         const mem = member;
         members.push(mem)
+    }
+    for (const memberss of req.body.tarjimon){
+        const mems = memberss;
+        member.push(mems)
     }
     for (const janr of req.body.janr){
         const ja = janr;
@@ -72,7 +77,7 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
          tayming: tayming,
          category: category,
          translator: members,
-         tarjimon: members,
+         tarjimon: member,
          janr: janrs,
          video: req.body.video,
          type: req.body.type,
@@ -214,8 +219,8 @@ exports.updateById = asyncHandler(async (req,res,next) => {
     kino.description.uz = req.body.descriptionuz
     kino.description.ru = req.body.descriptionru
     kino.category = req.body.category
-    kino.translator = members
-    kino.tarjimon = members
+    kino.translator = req.body.translator
+    kino.tarjimon = req.body.tarjimon
     kino.video = req.body.video,
         kino.rejissor = req.body.rejissor,
         kino.length = req.body.length,
