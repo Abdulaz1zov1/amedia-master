@@ -9,7 +9,6 @@ const SeasonSchema = mongoose.Schema({
         uz: {type: String, required: true},
         ru: {type: String, required: true}
     },
-
     category:[{
         type : mongoose.Schema.ObjectId,
         ref: 'category',

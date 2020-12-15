@@ -3,7 +3,7 @@ const router = express.Router({mergeParams: true});
 const multer = require('multer')
 const md5 = require('md5')
 const path = require('path')
-const {protoect , authorize} = require('../middlewares/auth');
+const {protect , authorize} = require('../middlewares/auth');
 
 const {
     //Season

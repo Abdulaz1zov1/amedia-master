@@ -5,6 +5,10 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp')
 
+const User = require('../models/user')
+const Kino = require('../models/kino')
+
+
 // Seriya Controller
 exports.addSeriya = asyncHandler(async (req,res,next) => {
     const seriya = new Seriya({
