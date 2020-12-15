@@ -12,6 +12,7 @@ const {
     getByIdSeason,
     deleteSeason,
     updateSeason,
+    checkStatusSeason,
     // Seriya
     addSeriya,
     updateSeriya,
@@ -31,10 +32,11 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 // Season Router
 router.post('/add',upload.array('images',10),addSeason)
-router.get('/all', protect,authorize('admin'), getAllSeason )
-router.get('/:id',protect,authorize('admin'), getByIdSeason )
+router.get('/all',  /* protect,authorize('admin'), */ getAllSeason )
+router.get('/:id',protect, getByIdSeason)
 router.delete('/:id' ,protect,authorize('admin') ,deleteSeason)
 router.put('/:id',protect,authorize('admin'),updateSeason)
+
 
 // Seriya Router
 router.post('/seriya/add',protect,authorize('admin'),addSeriya)

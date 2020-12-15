@@ -25,7 +25,7 @@ exports.updateFile = async (req, res) => {
 
                 let COMPRESSED_file = path.join(__dirname, '../public/uploads/avatar', new Date().getTime() + '.jpg')
                 sharp(req.file.path).resize(640,480).jpeg({
-                    quality: 80
+                    quality: 70
                 }).toFile(COMPRESSED_file, (error) => {
                     if(error){
                         throw error;

@@ -6,7 +6,8 @@ const Comment = require('../models/comment')
 const fs = require('fs');
 const sharp = require('sharp')
 const path = require('path');
-
+const JWT = require('jsonwebtoken');
+const User =  require('../models/user')
 
 exports.addCinema = asyncHandler(async (req,res,next) => {
     const files = req.files;
@@ -113,24 +114,41 @@ exports.getAll = asyncHandler(async (req,res,next)=>{
     })
 })
 exports.getById = asyncHandler(async (req, res, next)=>{
-    const kino = await Kino.findById(req.params.id)
-        .populate(['category', 'janr','translator','tayming','tarjimon'])
-    if(!kino){
-        res.status(404).json({
-            success: false,
-            data: new ErrorResponse('Kino not found',404)
-        })
-    }
+    // Compare user's id and kino's id and check status
+    const token = req.headers.authorization
+    const user =  JWT.decode(token.slice(7,token.length))
+    const me = await User.findOne({_id: user.id})
+        .select({_id: 1})
+
     const comment = await Comment.find({kinoId: req.params.id})
         .sort({date: -1})
         .populate('user')
 
 
-    res.status(200).json({
-        success: true,
-        data: kino,
-        comment
-    })
+    // Find by id and compare user's id and kino's id and check status
+    const kino = await Kino.findById(req.params.id)
+        .populate(['category', 'janr','translator','tayming','tarjimon'])
+
+    if(kino.status === 'free'){
+        return res.status(200).json({
+            success: true,
+            data: kino,
+            comment
+        })
+    } else {
+        if(me.status === 'vip' && kino.price === 'selling'){
+            return res.status(200).json({
+                success: true,
+                data: kino,
+                comment
+            })
+        }else if(me.status !== 'vip' && kino.price === 'selling'){
+            return res.status(401).json({
+                success: false,
+                data: "foydalanuvchi statusi vip emas"
+            })
+        }
+    }
 })
 exports.deleteById = asyncHandler(async (req,res,next)=>{
     await Kino.findById({_id: req.params.id})

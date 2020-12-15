@@ -4,9 +4,8 @@ const asyncHandler = require('../middlewares/async')
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp')
-
-const User = require('../models/user')
-const Kino = require('../models/kino')
+const JWT = require('jsonwebtoken');
+const User =  require('../models/user')
 
 
 // Seriya Controller
@@ -152,20 +151,33 @@ exports.getAllSeason = asyncHandler(async (req,res,next)=>{
     })
 })
 exports.getByIdSeason = asyncHandler(async (req,res,next) => {
+    // Find by id and compare user's id and seasons's id and check status
+    const token = req.headers.authorization
+    const user =  JWT.decode(token.slice(7,token.length))
+    const me = await User.findOne({_id: user.id})
+        .select({_id: 1})
+
     const season = await Season.findById(req.params.id)
         .populate(['category', 'janr','translator','tayming','tarjimon','seriya'])
 
-    if(!season){
-        res.status(404).json({
-            success: false,
-            data: 'Season not found'
+    if(season.status === 'free'){
+        return res.status(200).json({
+            success: true,
+            data: season
         })
+    } else {
+        if(me.status === 'vip' && season.price === 'selling'){
+            return res.status(200).json({
+                success: true,
+                data: season
+            })
+        }else if(me.status !== 'vip' && season.price === 'selling'){
+            return res.status(401).json({
+                success: false,
+                data: "foydalanuvchi statusi vip emas"
+            })
+        }
     }
-
-    res.status(200).json({
-        success: true,
-        data: season
-    })
 })
 exports.deleteSeason = asyncHandler(async (req,res,next) =>{
     await Season.findById({_id: req.params.id})

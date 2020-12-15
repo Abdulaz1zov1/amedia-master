@@ -1,7 +1,16 @@
 const express = require('express')
 const router = express.Router({mergeParams: true});
 const {protect , authorize} = require('../middlewares/auth');
-const {addCinema,getAll,filterByType,getById,deleteById, updateById,sortByCat} = require('../controllers/kino')
+const {
+    addCinema,
+    getAll,
+    filterByType,
+    getById,
+    deleteById,
+    updateById,
+    sortByCat
+}
+    = require('../controllers/kino')
 const multer = require('multer')
 const md5 = require('md5')
 const path = require('path')
@@ -15,6 +24,7 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({storage: storage});
+
 
 router.get('/all',getAll)
 router.get('/sort',sortByCat)
