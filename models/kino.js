@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const KinoSchema = new mongoose.Schema({
+const KinoSchema = mongoose.Schema({
     name: {
         uz: {type: String , required: true},
         ru: {type: String, required: true}
@@ -24,7 +24,7 @@ const KinoSchema = new mongoose.Schema({
         ref: 'member',
         required : true
     }],
-    video: {type: String},
+    video: {type: String, required: true},
     rejissor: {type: String, required: true},
     length: {type: String},
     studia: {type: String, required: true},
@@ -38,7 +38,11 @@ const KinoSchema = new mongoose.Schema({
         original:[{type: String}]
     },
     image: {type: String, required: true},
-    price: {type: String, enum:['free','selling']},
+    price: {
+        type: String,
+        enum:['free','selling'],
+        required: true
+    },
     year: {type: String, required: true},
     janr: [{
         type : mongoose.Schema.ObjectId,
