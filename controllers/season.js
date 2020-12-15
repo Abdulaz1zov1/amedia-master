@@ -150,6 +150,8 @@ exports.getAllSeason = asyncHandler(async (req,res,next)=>{
         data: season
     })
 })
+
+
 exports.getByIdSeason = asyncHandler(async (req,res,next) => {
     // Find by id and compare user's id and seasons's id and check status
     const token = req.headers.authorization
