@@ -1,30 +1,18 @@
-// const _ = require('lodash')
-// const request = require('request');
-// const { initializePayment } = require('../payment/Click')(request);
-//
-// exports.createClickRequest = (req,res) => {
-//     const form = _.pick(
-//         req.body,
-//         [
-//             'service_id',
-//             'amount',
-//             'phone_number',
-//             'merchant_trans_id',
-//             'full_name'
-//         ]);
-//     form.metadata = {
-//         full_name: form.full_name
-//     }
-//     form.amount *= 100;
-//
-//     initializePayment(form, (error, body) => {
-//         if (error) {
-//             //handle errors
-//             console.log(error);
-//             return res.send(error);
-//         }
-//         let response = JSON.parse(body);
-//         console.log(response);
-//         res.send(response)
-//     });
-// }
+const User = require('../models/user')
+
+exports.checkUser = async (req,res)=>{
+    const user = await User.findById(req.params.id)
+        .select({name: 1})
+
+    if(!user){
+        return res.status(404).json({
+            success: false,
+            data: 0
+        })
+    } else {
+        return res.status(200).json({
+            success: true,
+            user: user
+        })
+    }
+}

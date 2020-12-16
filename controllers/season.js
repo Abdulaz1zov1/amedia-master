@@ -162,21 +162,21 @@ exports.getByIdSeason = asyncHandler(async (req,res,next) => {
     const season = await Season.findById(req.params.id)
         .populate(['category', 'janr','translator','tayming','tarjimon','seriya'])
 
-    if(season.status === 'free'){
+    if(season.price === 'free'){
         return res.status(200).json({
             success: true,
             data: season
         })
     } else {
-        if(me.status === 'vip' && season.price === 'selling'){
-            return res.status(200).json({
-                success: true,
-                data: season
-            })
-        }else if(me.status !== 'vip' && season.price === 'selling'){
+        if(me.status !== 'vip' && season.price === 'selling'){
             return res.status(401).json({
                 success: false,
                 data: "foydalanuvchi statusi vip emas"
+            })
+        }else if(me.status === 'vip' && season.price === 'selling'){
+            return res.status(200).json({
+                success: true,
+                data: season
             })
         }
     }
