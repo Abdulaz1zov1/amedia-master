@@ -26,7 +26,7 @@ const KinoSchema = mongoose.Schema({
     }],
     video: {type: String, required: true},
     rejissor: {type: String, required: true},
-    length: {type: String},
+    length: {type: String, required: true},
     studia: {type: String, required: true},
     tayming:[{
         type: mongoose.Schema.ObjectId,
@@ -34,10 +34,11 @@ const KinoSchema = mongoose.Schema({
         required: true
     }],
     screens: {
-        thumb:[{type: String}],
-        original:[{type: String}]
+        thumb:[{type: String,required: true}],
+        original:[{type: String, required: true}]
     },
     image: {type: String, required: true},
+
     price: {
         type: String,
         enum:['free','selling'],
@@ -53,10 +54,9 @@ const KinoSchema = mongoose.Schema({
     rating: {type: Number, default: 0},
     info:{
         views: {type: Number, default: 0},
-
     },
     slug: {type: String, required: true, unique: true, lowercase: true},
-    status: {type: String, required: true},
+    //status: {type: String, required: true},
     date: {type: Date , default: Date.now()}
 })
 

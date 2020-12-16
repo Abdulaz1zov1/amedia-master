@@ -31,9 +31,10 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
 
     const category=[];
     const members = [];
-    const janrs = []
-    const tayming = []
-    const member = [];
+    const tarjimon = [];
+    const janrs = [];
+    const tayming = [];
+
 
     for(const cat of req.body.category){
         const catt = cat
@@ -43,9 +44,9 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
         const mem = member;
         members.push(mem)
     }
-    for (const memberss of req.body.tarjimon){
-        const mems = memberss;
-        member.push(mems)
+    for (const key of req.body.tarjimon){
+        const tarj = key;
+        tarjimon.push(tarj)
     }
     for (const janr of req.body.janr){
         const ja = janr;
@@ -77,15 +78,18 @@ exports.addCinema = asyncHandler(async (req,res,next) => {
          tayming: tayming,
          category: category,
          translator: members,
-         tarjimon: member,
+         tarjimon: tarjimon,
          janr: janrs,
+
          video: req.body.video,
-         type: req.body.type,
          price: req.body.price,
          slug: (Math.floor(Math.random()*9999999999999)).toString(),
-         status: req.body.status,
          year: req.body.year,
          country: req.body.country
+
+         //status: req.body.status,
+
+
     })
     kino.save()
         .then(()=>{
