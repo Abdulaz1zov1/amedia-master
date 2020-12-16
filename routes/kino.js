@@ -32,5 +32,4 @@ router.get('/:id', protect, getById)
 router.delete('/:id',protect, authorize('publisher' , 'admin'),deleteById)
 router.put('/:id',updateById)
 
-
 module.exports = router
