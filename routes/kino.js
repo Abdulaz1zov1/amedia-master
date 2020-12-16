@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
-router.post('/add',protect, authorize('publisher' , 'admin'),upload.array('image', 12), addCinema)
+router.post('/add',protect, authorize('publisher' , 'admin'),upload.array('images', 12), addCinema)
 router.get('/all',getAll)
 router.get('/sort',sortByCat)
 router.get('/:id', protect, getById)
