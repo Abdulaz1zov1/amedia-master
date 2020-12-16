@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 router.route('/')
     .get(allMembers)
-    .post( /* protect , authorize('publisher' , 'admin'), */upload.single('file'),addMember);
+    .post( protect , authorize('publisher' , 'admin'),upload.single('file'),addMember);
 
 router.route('/:id')
     .delete(protect , authorize('admin') ,deleteMember);
