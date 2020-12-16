@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const {clickuz} = require('../controllers/Payment')
+const {checkUser} = require('../controllers/Payment')
 
-router.post('/click', clickuz)
+router.post('/check/:id', checkUser)
 
 module.exports = router;

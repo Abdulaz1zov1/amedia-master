@@ -166,15 +166,15 @@ exports.getByIdSeason = asyncHandler(async (req,res,next) => {
             data: season
         })
     } else {
-        if(me.status === 'vip' && season.price === 'selling'){
-            return res.status(200).json({
-                success: true,
-                data: season
-            })
-        }else if(me.status !== 'vip' && season.price === 'selling'){
+        if(me.status !== 'vip' && season.price === 'selling'){
             return res.status(401).json({
                 success: false,
                 data: "foydalanuvchi statusi vip emas"
+            })
+        }else if(me.status === 'vip' && season.price === 'selling'){
+            return res.status(200).json({
+                success: true,
+                data: season
             })
         }
     }
