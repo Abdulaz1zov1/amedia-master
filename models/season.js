@@ -24,7 +24,7 @@ const SeasonSchema = mongoose.Schema({
         ref: 'member',
         required : true
     }],
-    video: {type: String},
+
     rejissor: {type: String, required: true},
     length: {type: String},
     studia: {type: String, required: true},
@@ -33,7 +33,11 @@ const SeasonSchema = mongoose.Schema({
         ref: 'member',
         required: true
     }],
-    price: {type: String, enum:['free','selling']},
+    price: {
+        type: String,
+        enum:['free','selling'],
+        required: true
+    },
     janr: [{
         type : mongoose.Schema.ObjectId,
         ref: 'janr',

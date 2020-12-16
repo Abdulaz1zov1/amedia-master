@@ -17,7 +17,7 @@ const path = require('path')
 
 const storage = multer.diskStorage({
     destination: function (req,file,cb) {
-        cb(null, './public/uploads/cinema');
+        cb(null, './public/uploads/cinema/org');
     },
     filename: function (req,file,cb) {
         cb(null, `${md5(Date.now())}${path.extname(file.originalname)}`);
@@ -25,14 +25,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
-
+router.post('/add',protect, authorize('publisher' , 'admin'),upload.array('image', 12), addCinema)
 router.get('/all',getAll)
 router.get('/sort',sortByCat)
-router.get('/:id',getById)
+router.get('/:id', protect, getById)
 router.delete('/:id',protect, authorize('publisher' , 'admin'),deleteById)
 router.put('/:id',updateById)
-router.post('/add',protect, authorize('publisher' , 'admin'),upload.array('images', 12),addCinema)
-
 
 
 module.exports = router

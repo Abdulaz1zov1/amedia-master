@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const KinoSchema = new mongoose.Schema({
+const KinoSchema = mongoose.Schema({
     name: {
         uz: {type: String , required: true},
         ru: {type: String, required: true}
@@ -24,9 +24,9 @@ const KinoSchema = new mongoose.Schema({
         ref: 'member',
         required : true
     }],
-    video: {type: String},
+    video: {type: String, required: true},
     rejissor: {type: String, required: true},
-    length: {type: String},
+    length: {type: String, required: true},
     studia: {type: String, required: true},
     tayming:[{
         type: mongoose.Schema.ObjectId,
@@ -34,11 +34,16 @@ const KinoSchema = new mongoose.Schema({
         required: true
     }],
     screens: {
-        thumb:[{type: String}],
-        original:[{type: String}]
+        thumb:[{type: String,required: true}],
+        original:[{type: String, required: true}]
     },
     image: {type: String, required: true},
-    price: {type: String, enum:['free','selling']},
+
+    price: {
+        type: String,
+        enum:['free','selling'],
+        required: true
+    },
     year: {type: String, required: true},
     janr: [{
         type : mongoose.Schema.ObjectId,
@@ -49,10 +54,9 @@ const KinoSchema = new mongoose.Schema({
     rating: {type: Number, default: 0},
     info:{
         views: {type: Number, default: 0},
-
     },
     slug: {type: String, required: true, unique: true, lowercase: true},
-    status: {type: String, required: true},
+    //status: {type: String, required: true},
     date: {type: Date , default: Date.now()}
 })
 
