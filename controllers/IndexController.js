@@ -22,15 +22,11 @@ exports.index = asynHandler(async (req,res,next)=>{
         .sort({date: -1})
         .limit(1)
     const kino = await Kino.find()
-        .skip((pageNumber - 1 )* 20)
         .limit(20)
         .sort({date: -1})
         .select({name: 1, category: 1,type: 1, image: 1, rating: 1})
         .populate({path: 'category', select: 'nameuz'})
-
-
     const season = await Season.find()
-        .skip((pageNumber - 1 )* 20)
         .limit(20)
         .sort({date: -1})
         .select({name: 1, category: 1, image: 1, rating: 1})
