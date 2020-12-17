@@ -26,7 +26,7 @@ const jurnalSchema =  mongoose.Schema({
 
 jurnalSchema.pre('save',function (){
     if(this.status === false){
-        return 0
+        return console.log('this status false')
     } else if(this.status === true) {
         const user = this.model('Users').findById(this.userID)
         user.balance = this.amount
