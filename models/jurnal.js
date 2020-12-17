@@ -24,4 +24,18 @@ const jurnalSchema =  mongoose.Schema({
 
 })
 
+jurnalSchema.pre('save',function (){
+    if(this.status === false){
+        return 0
+    } else if(this.status === true) {
+        const user = this.model('Users').findById(this.userID)
+        user.balance = this.amount
+        user.save()
+            .then(()=>{
+                console.log('success saved')
+            }).catch((e)=>{
+                console.log(e)
+        })
+    }
+})
 module.exports = mongoose.model('jurnal', jurnalSchema)
