@@ -19,7 +19,10 @@ exports.checkUser = async (req,res)=>{
        }
 
    } catch (e){
-       res.send(e)
+       res.status(400).json({
+           success: false,
+           data: e
+       })
    }
 }
 
