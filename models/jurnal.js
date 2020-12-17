@@ -30,8 +30,12 @@ jurnalSchema.pre('save',async function(next){
         // next();
     } else if(this.status === true) {
         const user = await this.model('Users').findByIdAndUpdate({_id: this.userID})
-        user.balance = this.amount
-        user.save()
+        if(user.balance !== 0){
+            user.balance += this.amount
+        } else {
+            user.balance = this.amount
+        }
+    user.save()
         next();
     }
 })
