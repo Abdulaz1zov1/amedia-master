@@ -2,6 +2,8 @@ const Category = require('../models/category');
 const {Products} = require('../models/product');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middlewares/async');
+const Kino = require('../models/kino');
+const Season = require('../models/season')
 
 // @description Get all Categories
 // @route GET /api/category
@@ -26,7 +28,7 @@ exports.getCategory = asyncHandler( async (req , res , next) => {
     const category = await Category.findById(req.params.categoryId);
     if(!category)
         return next(new ErrorResponse(`Resourse not found with id of ${req.params.categoryId}`, 404))
-  res.status(200).json({success: true , data: category});
+    res.status(200).json({success: true , data: category});
 });
 
 // @description update Category
@@ -53,3 +55,31 @@ exports.deleteCategory = asyncHandler( async (req , res , next) => {
   res.status(200).json({success: true , data: category});
 });
 
+
+// @description Query (Kino,Season)
+// @route GET /api/category/:categoryId
+// @access Private/(Admin or Publisher)
+exports.getCategoryQuery = asyncHandler( async (req , res , next) => {
+    // await Category.findById(req.params.categoryId)
+    //     .exec(async (error) => {
+    //         if(error){
+    //             res.send(error)
+    //         }else{
+    //
+    //         }
+    //     })
+
+
+
+    if(req.params.type == "kino"){
+        return let kinoQuery = await Kino.find()
+    }
+    else if (req.params.type == "season"){
+        return seasonQuery = await Season.find()
+    }
+    res.status(200).json({
+        success: true ,
+        data: kinoQuery,
+        seasonQuery
+    });
+});

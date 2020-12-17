@@ -3,7 +3,9 @@ const { getCategories ,
         getCategory ,
         createCategory,
         deleteCategory,
-        updateCategory } = require('../controllers/categories');
+        updateCategory,
+        getCategoryQuery
+} = require('../controllers/categories');
 
 // Include other resource routers
 const productRouter = require('./products');
@@ -21,8 +23,11 @@ router.route('/')
     .get(getCategories)
     .post(protect , authorize('publisher' , 'admin'), createCategory);
 
+
+
 router.route('/:categoryId')
-    .get(protect , authorize('publisher' , 'admin') , getCategory)
+    .get(/* protect , authorize('publisher' , 'admin') , */ getCategory)
+    .get(getCategoryQuery)
     .put(protect , authorize('admin') ,updateCategory)
     .delete(protect , authorize('admin') ,deleteCategory);
 

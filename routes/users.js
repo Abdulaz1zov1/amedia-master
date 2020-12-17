@@ -29,7 +29,7 @@ const upload = multer({ storage: storage })
 
 router
     .route('/')
-    .get(/* protect,authorize('admin','publisher'),  */ getUsers)
+    .get( protect,authorize('admin','publisher'),  getUsers)
     .post(protect,authorize('admin','publisher') , createUser);
 
 router
