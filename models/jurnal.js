@@ -29,7 +29,7 @@ jurnalSchema.pre('save',async (next)=>{
         return console.log('this status false')
         // next();
     } else if(this.status === true) {
-        const user = await this.model('Users').findById({_id: this.userID})
+        const user = await this.model('Users').findByIdAndUpdate({_id: this.userID})
         if(user.balance === 0){
             user.balance = this.amount
             user.save()
