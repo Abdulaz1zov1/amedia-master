@@ -24,18 +24,20 @@ const jurnalSchema =  mongoose.Schema({
 
 })
 
-jurnalSchema.pre('save',function (){
+jurnalSchema.pre('save',async (next)=>{
     if(this.status === false){
         return console.log('this status false')
     } else if(this.status === true) {
-        const user = this.model('Users').findById(this.userID)
-        user.balance = this.amount
-        user.save()
-            .then(()=>{
-                console.log('success saved')
-            }).catch((e)=>{
-                console.log(e)
-        })
+        const user = await this.model('Users').findById({_id: this.userID})
+        if(user.balance === 0){
+            user.balance = this.amount
+            user.save()
+
+        } else if(user.balance > 0){
+            user.balance += this.amount
+            user.save()
+        }
+
     }
 })
 module.exports = mongoose.model('jurnal', jurnalSchema)
