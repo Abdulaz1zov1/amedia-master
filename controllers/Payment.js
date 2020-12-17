@@ -2,20 +2,25 @@ const User = require('../models/user')
 const Jurnal = require('../models/jurnal')
 
 exports.checkUser = async (req,res)=>{
-    const user = await User.findById(req.params.id)
-        .select({name: 1})
+   try{
+       const user = await User.findById(req.params.id)
+           .select({name: 1})
 
-    if(!user){
-        return res.status(404).json({
-            success: false,
-            data: 0
-        })
-    } else {
-        return res.status(200).json({
-            success: true,
-            user: user
-        })
-    }
+       if(!user){
+           return res.status(404).json({
+               success: false,
+               data: 0
+           })
+       } else {
+           return res.status(200).json({
+               success: true,
+               user: user
+           })
+       }
+
+   } catch (e){
+       res.send(e)
+   }
 }
 
 exports.saveData = async (req,res)=>{
