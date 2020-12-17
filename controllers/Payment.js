@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Jurnal = require('../models/jurnal')
 
 exports.checkUser = async (req,res)=>{
     const user = await User.findById(req.params.id)
@@ -15,4 +16,28 @@ exports.checkUser = async (req,res)=>{
             user: user
         })
     }
+}
+
+exports.saveData = async (req,res)=>{
+    const jurnal = new Jurnal({
+        userID: req.body.userID,
+        amount: req.body.amount,
+        type: req.body.type,
+        status: req.body.status,
+        date: req.body.date
+    })
+
+    await jurnal.save()
+        .then(() => {
+            res.status(201).json({
+                success: true,
+                data: jurnal
+            })
+        })
+        .catch((error) => {
+            res.status(400).json({
+                success: false,
+                data: error
+            })
+        })
 }
