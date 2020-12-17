@@ -56,30 +56,3 @@ exports.deleteCategory = asyncHandler( async (req , res , next) => {
 });
 
 
-// @description Query (Kino,Season)
-// @route GET /api/category/:categoryId
-// @access Private/(Admin or Publisher)
-exports.getCategoryQuery = asyncHandler( async (req , res , next) => {
-    // await Category.findById(req.params.categoryId)
-    //     .exec(async (error) => {
-    //         if(error){
-    //             res.send(error)
-    //         }else{
-    //
-    //         }
-    //     })
-
-
-
-    if(req.params.type == "kino"){
-        return let kinoQuery = await Kino.find()
-    }
-    else if (req.params.type == "season"){
-        return seasonQuery = await Season.find()
-    }
-    res.status(200).json({
-        success: true ,
-        data: kinoQuery,
-        seasonQuery
-    });
-});
