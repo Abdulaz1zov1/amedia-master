@@ -1,10 +1,12 @@
 const express = require('express');
-const { getCategories ,
+const {
+        getQuery,
+        getCategories ,
         getCategory ,
         createCategory,
         deleteCategory,
         updateCategory,
-        getCategoryQuery
+
 } = require('../controllers/categories');
 
 // Include other resource routers
@@ -19,11 +21,12 @@ const {protect , authorize} = require('../middlewares/auth');
 
 router.route('/')
     .get(getCategories)
-    .post(protect , authorize('publisher' , 'admin'), createCategory);
+    .post(protect , authorize('publisher' , 'admin'), createCategory)
 
 router.route('/:categoryId')
-    .get(protect , authorize('publisher' , 'admin') , getCategory)
+    .get(getQuery)
+    .get( protect , authorize('publisher' , 'admin'), getCategory)
     .put(protect , authorize('admin') ,updateCategory)
-    .delete(protect , authorize('admin') ,deleteCategory);
+    .delete(protect , authorize('admin') ,deleteCategory)
 
 module.exports = router;
