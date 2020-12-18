@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const Comment = require('../models/comment');
 const Product = require('../models/product')
+const Kino = require('../models/kino')
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middlewares/async');
 
@@ -27,8 +28,6 @@ exports.writeComment = asyncHandler( async (req , res) => {
             })
         })
   });
-
-
 exports.allComments = asyncHandler(async (req,res)=>{
     const comments = await Comment.find()
         .sort({date: -1})
@@ -51,7 +50,6 @@ exports.editStatus = asyncHandler(async (req,res)=>{
             res.send(error)
         })
 })
-
 // @description Delete single Comment
 // @route DELETE /api/comment/:id
 // @access Private/Admin
@@ -63,12 +61,8 @@ exports.deleteComment = asyncHandler( async (req , res , next) => {
     res.status(201).json({success: true , data: comment});
   });
 
-
-
-
-
 // exports.getCommentById = asyncHandler(async (req, res, next) => {
-//     const comment = await Comment.findById({kinoId: req.params.id})
+//     const comment = await Comment.findOne({kinoId: req.params.id})
 //         .sort({date: -1})
 //         .populate('product')
 //

@@ -11,6 +11,10 @@ const newsSchema = mongoose.Schema({
     },
     image: {type: String, required: true},
     slug: {type: String, required: true},
-    date: {type: Date, default: Date.now()}
+    date: {type: Date, default: Date.now()},
+
+    status:{
+        type: Boolean, default: true
+    }
 })
 module.exports = mongoose.model('news',newsSchema)

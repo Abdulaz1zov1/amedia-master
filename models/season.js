@@ -57,7 +57,12 @@ const SeasonSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    date: {type: Date, default: Date.now()}
+    date: {type: Date, default: Date.now()},
+
+
+    status:{
+        type: Boolean, default: true
+    }
 })
 
 
