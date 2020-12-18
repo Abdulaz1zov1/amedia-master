@@ -4,7 +4,7 @@ const Jurnal = require('../models/jurnal')
 exports.checkUser = async (req,res)=>{
    try{
        const user = await User.findById(req.params.id)
-           .select({name: 1})
+           .select({name: 1, balance: 1})
 
        if(!user){
            return res.status(404).json({
