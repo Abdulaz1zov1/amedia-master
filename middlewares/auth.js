@@ -16,13 +16,13 @@ exports.protect = asyncHandler( async (req , res , next) => {
 
 
     // If deadline has been expired, user must be authorizated
-    const decoded = JWT.verify(token , process.env.JWT_KEY);
-    if(decoded.exp < Date.now()){
-        res.status(400).json({
-            success: false,
-            data: `The deadline has expired`
-        })
-    }
+    // const decoded = JWT.verify(token , process.env.JWT_KEY);
+    // if(decoded.exp < Date.now()){
+    //     res.status(400).json({
+    //         success: false,
+    //         data: `The deadline has expired`
+    //     })
+    // }
 
 
     if(!token) {

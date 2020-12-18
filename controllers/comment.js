@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const Comment = require('../models/comment');
+const Product = require('../models/product')
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middlewares/async');
 
@@ -8,11 +9,11 @@ const asyncHandler = require('../middlewares/async');
 // @access Private
 exports.writeComment = asyncHandler( async (req , res) => {
     const user = jwt.decode(req.headers.authorization.slice(7))
-   const comment = new Comment({
-       message: req.body.message,
-       kinoId: req.body.kinoId,
-       user: user.id
-   })
+    const comment = new Comment({
+        message: req.body.message,
+        kinoId: req.body.kinoId,
+        user: user.id
+    })
     comment.save()
         .then(()=>{
             res.status(201).json({
@@ -61,3 +62,19 @@ exports.deleteComment = asyncHandler( async (req , res , next) => {
 
     res.status(201).json({success: true , data: comment});
   });
+
+
+
+
+
+// exports.getCommentById = asyncHandler(async (req, res, next) => {
+//     const comment = await Comment.findById({kinoId: req.params.id})
+//         .sort({date: -1})
+//         .populate('product')
+//
+//     return res.status(200).json({
+//         success: true,
+//         data: comment
+//     })
+//
+// })
