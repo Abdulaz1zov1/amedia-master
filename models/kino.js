@@ -56,8 +56,11 @@ const KinoSchema = mongoose.Schema({
         views: {type: Number, default: 0},
     },
     slug: {type: String, required: true, unique: true, lowercase: true},
-    //status: {type: String, required: true},
-    date: {type: Date , default: Date.now()}
+    date: {type: Date , default: Date.now()},
+
+    status:{
+        type: Boolean, default: true
+    }
 })
 
 module.exports = mongoose.model('kino',KinoSchema)

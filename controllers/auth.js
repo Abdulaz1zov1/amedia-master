@@ -137,21 +137,16 @@ exports.forgotPassword = asyncHandler( async (req , res , next) => {
 exports.resetPassword = asyncHandler( async (req , res , next) => {
 
     //Hashing password
-    // const salt = await bcrypt.genSaltSync(12);
-    // const newHashedPassword = await bcrypt.hashSync(req.body.password, salt);
-
-
+    const salt = await bcrypt.genSaltSync(12);
+    const newHashedPassword = await bcrypt.hashSync(req.body.password, salt);
     const user = await User.findOneAndUpdate({
         resetPasswordToken: req.params.resettoken
     });
-
     if(!user){
         return next(new ErrorResponse('Invalid Token' , 400));
     }
-
     // New password is set and it will be hashed after that
-
-         user.password = req.body.password;
+         user.password = newHashedPassword;
           user.resetPasswordToken = undefined;
           user.resetPasswordExpire = undefined;
          // console.log(user.password);
