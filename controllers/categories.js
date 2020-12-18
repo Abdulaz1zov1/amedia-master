@@ -79,3 +79,26 @@ exports.getQuery = asyncHandler(async (req, res, next) => {
     }
 
 })
+exports.getQuery = asyncHandler(async (req, res, next) => {
+    try{
+        let resultQuery;
+        let type = req.query.type
+        if(type == 'kino'){
+            resultQuery = await Kino.find({category: req.params.categoryId})
+        }
+        if(type == 'season'){
+            resultQuery = await Season.find({category: req.params.categoryId})
+        }
+        res.status(200).json({
+            success: true,
+            count: resultQuery.length,
+            data: resultQuery
+        })
+
+    }catch (error){
+        if((type != 'kino') || type != 'season'){
+            res.send(error)
+        }
+    }
+
+})
