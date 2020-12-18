@@ -5,6 +5,11 @@ const asyncHandler = require('../middlewares/async');
 const Kino = require('../models/kino');
 const Season = require('../models/season')
 
+
+
+
+
+
 // @description Get all Categories
 // @route GET /api/category
 // @access Public
@@ -56,7 +61,7 @@ exports.deleteCategory = asyncHandler( async (req , res , next) => {
 });
 
 
-exports.getQuery = asyncHandler(async (req, res, next) => {
+exports.getQuery = asyncHandler(async (req, res) => {
     try{
         let resultQuery;
         let type = req.query.type
@@ -79,3 +84,5 @@ exports.getQuery = asyncHandler(async (req, res, next) => {
     }
 
 })
+
+
