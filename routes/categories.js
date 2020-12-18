@@ -25,7 +25,7 @@ router.route('/')
 
 router.route('/:categoryId')
     .get(getQuery)
-    .get( protect , authorize('publisher' , 'admin'), getCategory)
+    .get(getCategory)
     .put(protect , authorize('admin') ,updateCategory)
     .delete(protect , authorize('admin') ,deleteCategory)
 
