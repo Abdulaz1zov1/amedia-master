@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const JWT = require('jsonwebtoken')
 const sendEmail = require('../utils/sendEmail');
 const User = require('../models/user');
 const ErrorResponse = require('../utils/errorResponse');
@@ -50,9 +51,11 @@ exports.login = asyncHandler( async (req , res , next) => {
 // @route GET /api/auth/me
 // @access Private
 exports.getMe = asyncHandler( async (req , res , next) => {
- const user = await User.findById(req.user.id)
+    const token = req.headers.authorization
+    const my =  JWT.decode(token.slice(7,token.length))
+ const user = await User.findById({_id: my.id})
  res.status(201).json({success: true , data: user});
- sendTokenResponse(user, 200 , res);
+ //sendTokenResponse(user, 200 , res);
 });
 
 // @description update current logged user details
@@ -146,7 +149,7 @@ exports.resetPassword = asyncHandler( async (req , res , next) => {
          user.password = newHashedPassword;
           user.resetPasswordToken = undefined;
           user.resetPasswordExpire = undefined;
-          console.log(user.password);
+         // console.log(user.password);
           await user.save();
 
           sendTokenResponse(user, 200 , res);
