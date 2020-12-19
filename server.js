@@ -49,6 +49,8 @@ app.use('/api/rate' , require('./routes/rating'));
 app.use('/api/comment' , require('./routes/comment'));
 app.use('/api/video' , require('./routes/video'));
 app.use('/api/payment' , require('./routes/payment'));
+app.use('/api/pricelist' , require('./routes/priceList'));
+//app.use('/api/balance' , require('./routes/priceList'));
 
 app.use(errorHandler);
 
