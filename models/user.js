@@ -34,12 +34,12 @@ const userSchema = new mongoose.Schema({
     role : {
         type : String,
         enum : ['user', 'publisher','admin'],
-        default: 'admin'
+        default: 'user'
     },
     status : {
         type: String,
         enum : ['user' , 'vip'],
-        default: 'vip'
+        default: 'user'
     },
     balance : {
         type: Number,
