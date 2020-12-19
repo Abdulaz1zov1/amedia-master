@@ -50,7 +50,7 @@ exports.saveData = async (req,res)=>{
         })
 }
 
-exports.getAllUsers = async(req, res)=> {
+exports.Events = async(req, res)=> {
     const jurnal = await Jurnal.find()
         .sort({ date: -1})
     res.status(200).json({

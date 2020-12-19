@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const {checkUser, saveData, getAllUsers} = require('../controllers/Payment')
+const {checkUser, saveData, Events} = require('../controllers/Payment')
+const {protect , authorize} = require('../middlewares/auth');
 
 router.post('/check/:id', checkUser)
 router.post('/create', saveData)
-router.get('/all', getAllUsers)
+router.get('/all', protect , authorize('admin'), Events)
 
 module.exports = router;
