@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     status : {
         type: String,
         enum : ['user' , 'vip'],
-        default: 'user'
+        default: 'vip'
     },
     balance : {
         type: Number,
